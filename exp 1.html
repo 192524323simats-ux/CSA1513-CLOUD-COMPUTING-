@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Reservation System - SaaS</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaf2f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a5276;
+        }
+
+        h2 {
+            color: #2874a6;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 95%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+        .radio {
+            width: auto;
+        }
+
+        button {
+            background-color: #2874a6;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #1b4f72;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #d5f5e3;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>✈ Flight Reservation System</h1>
+
+    <h2>Cloud SaaS Application</h2>
+
+    <form id="flightForm">
+
+        <!-- Trip Type -->
+        <div class="section">
+            <label>Trip Type:</label><br>
+
+            <input class="radio" type="radio"
+                   name="trip"
+                   value="One Way"
+                   checked>
+            One Way
+
+            <input class="radio" type="radio"
+                   name="trip"
+                   value="Round Trip">
+            Round Trip
+        </div>
+
+        <!-- Flight Type -->
+        <div class="section">
+            <label>Flight Type:</label><br>
+
+            <input class="radio"
+                   type="radio"
+                   name="flightType"
+                   value="Domestic"
+                   checked>
+            Domestic
+
+            <input class="radio"
+                   type="radio"
+                   name="flightType"
+                   value="International">
+            International
+        </div>
+
+        <!-- From -->
+        <div class="section">
+            <label>From:</label>
+            <select id="from">
+                <option>Chennai (MAA)</option>
+                <option>Delhi (DEL)</option>
+                <option>Mumbai (BOM)</option>
+                <option>Bangalore (BLR)</option>
+                <option>Hyderabad (HYD)</option>
+            </select>
+        </div>
+
+        <!-- To -->
+        <div class="section">
+            <label>To:</label>
+            <select id="to">
+                <option>Delhi (DEL)</option>
+                <option>Chennai (MAA)</option>
+                <option>Mumbai (BOM)</option>
+                <option>Bangalore (BLR)</option>
+                <option>Hyderabad (HYD)</option>
+            </select>
+        </div>
+
+        <!-- Departure -->
+        <div class="section">
+            <label>Departure Date:</label>
+            <input type="date" id="departure">
+        </div>
+
+        <!-- Return -->
+        <div class="section">
+            <label>Return Date:</label>
+            <input type="date" id="returnDate">
+        </div>
+
+        <!-- Travelers -->
+        <div class="section">
+            <label>Travelers:</label>
+            <select id="travelers">
+                <option>1 Traveler</option>
+                <option>2 Travelers</option>
+                <option>3 Travelers</option>
+                <option>4 Travelers</option>
+                <option>5 Travelers</option>
+            </select>
+        </div>
+
+        <!-- Class -->
+        <div class="section">
+            <label>Class:</label>
+            <select id="class">
+                <option>Economy</option>
+                <option>Premium Economy</option>
+                <option>Business</option>
+                <option>First Class</option>
+            </select>
+        </div>
+
+        <!-- Fare Type -->
+        <div class="section">
+            <label>Fare Type:</label>
+            <select id="fare">
+                <option>Regular Fare</option>
+                <option>Student Fare</option>
+                <option>Senior Citizen Fare</option>
+                <option>Armed Forces Fare</option>
+            </select>
+        </div>
+
+        <button type="button" onclick="searchFlight()">
+            Search Flight
+        </button>
+
+    </form>
+
+    <!-- Result -->
+    <div id="result">
+        <h2>Flight Details</h2>
+
+        <p><b>Route:</b> <span id="route"></span></p>
+
+        <p><b>Trip:</b> <span id="trip"></span></p>
+
+        <p><b>Flight Type:</b> <span id="flightType"></span></p>
+
+        <p><b>Departure:</b> <span id="date"></span></p>
+
+        <p><b>Travelers:</b> <span id="traveler"></span></p>
+
+        <p><b>Class:</b> <span id="flightClass"></span></p>
+
+        <p><b>Fare Type:</b> <span id="fareType"></span></p>
+
+        <h3>Estimated Fare: ₹6,499</h3>
+
+        <button onclick="bookFlight()">
+            Reserve Flight
+        </button>
+
+        <p id="booking"></p>
+    </div>
+
+</div>
+
+<script>
+
+function searchFlight() {
+
+    var from = document.getElementById("from").value;
+    var to = document.getElementById("to").value;
+
+    var departure = document.getElementById("departure").value;
+
+    var travelers =
+        document.getElementById("travelers").value;
+
+    var flightClass =
+        document.getElementById("class").value;
+
+    var fare =
+        document.getElementById("fare").value;
+
+    var trip =
+        document.querySelector(
+            'input[name="trip"]:checked'
+        ).value;
+
+    var flightType =
+        document.querySelector(
+            'input[name="flightType"]:checked'
+        ).value;
+
+    document.getElementById("route").innerHTML =
+        from + " → " + to;
+
+    document.getElementById("trip").innerHTML =
+        trip;
+
+    document.getElementById("flightType").innerHTML =
+        flightType;
+
+    document.getElementById("date").innerHTML =
+        departure;
+
+    document.getElementById("traveler").innerHTML =
+        travelers;
+
+    document.getElementById("flightClass").innerHTML =
+        flightClass;
+
+    document.getElementById("fareType").innerHTML =
+        fare;
+
+    document.getElementById("result").style.display =
+        "block";
+}
+
+function bookFlight() {
+
+    document.getElementById("booking").innerHTML =
+        "✓ Flight Reserved Successfully! " +
+        "Booking ID: FL" +
+        Math.floor(100000 + Math.random() * 900000);
+}
+
+</script>
+
+</body>
+</html>
